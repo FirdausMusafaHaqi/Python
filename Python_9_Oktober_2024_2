@@ -1,0 +1,33 @@
+import cv2
+import numpy as np
+
+img = cv2.imread('blocks.jpg')
+
+hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+lower_blue = np.array([110,50,50])
+upper_blue = np.array([130,255,255])
+
+lower_red = np.array([0,155,128])
+upper_red = np.array([0,255,255])
+
+lower_green = np.array([60,100,128])
+upper_green = np.array([60,255,255])
+
+lower_yellow = np.array([20,100,100])
+upper_yellow = np.array([30,255,255])
+
+mask_blue = cv2.inRange(hsv.copy(), lower_blue, upper_blue)
+mask_red = cv2.inRange(hsv.copy(), lower_red, upper_red)
+mask_green = cv2.inRange(hsv.copy(), lower_green, upper_green)
+mask_yellow = cv2.inRange(hsv.copy(), lower_yellow, upper_yellow)
+
+mask = mask_blue + mask_red + mask_green + mask_yellow
+
+res = cv2.bitwise_and(img, img, mask=mask)
+
+cv2.imshow('frame', img)
+cv2.imshow('res', res)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
