@@ -1,0 +1,29 @@
+import cv2
+import numpy as np
+
+img = cv2.imread('mata.jpg')
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# apply gaussian blur, using 5x5 Gaussian Filtering
+blur = cv2.GaussianBlur(gray,(5,5),0, 0)
+
+# Apply laugh transform on the image
+# cv2HoughCircle(
+#               <image>,
+#                method,
+#                inverse_ratio,
+#                mint_dist_center,
+#                max_vol_canny,
+#                accumulator_threshold,
+#                minRadius, maxRadius)
+circles = cv2.HoughCircles(blur, cv2.HOUGH_GRADIENT, 1, img.shape[0]/64, param1=200, param2=15, minRadius=70, maxRadius=82)
+
+# draw detected circle
+if circles is not None:
+    circles = np.uint16(np.around(circles))
+    for i in circles[0,:]:
+        cv2.circle(img, (i[0], i[1]), i[2], (0, 255, 0), 2)
+
+cv2.imshow("output", img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
